@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Wrekin College E-Learning Hub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Wrekin E-Learning Hub">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0f2547">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Wrekin Hub">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+  <link rel="shortcut icon" href="favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #0f2547;
+      --navy-mid: #1a3a6e;
+      --navy-light: #2a5ca8;
+      --accent: #c9a84c;
+      --accent-light: #e8c97a;
+      --cream: #f7f4ef;
+      --surface: #ffffff;
+      --border: rgba(15,37,71,0.1);
+      --text-primary: #0f2547;
+      --text-secondary: #4a5568;
+      --text-muted: #8896a7;
+      --radius: 14px;
+      --radius-sm: 8px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--navy);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem; height: 58px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .topbar-logo {
+      display: flex; align-items: center; gap: 12px; text-decoration: none;
+    }
+    .topbar-logo img {
+      height: 36px; width: 36px; object-fit: cover;
+      border-radius: 8px; border: 1px solid rgba(255,255,255,0.15);
+    }
+    .topbar-logo-name {
+      font-family: 'Sora', sans-serif;
+      font-size: 15px; font-weight: 500; color: #fff; letter-spacing: 0.01em;
+    }
+    .topbar-nav { display: flex; gap: 0; }
+    .topbar-nav a {
+      font-size: 13px; color: rgba(255,255,255,0.6);
+      text-decoration: none; padding: 0 1.1rem; height: 58px;
+      display: flex; align-items: center;
+      border-bottom: 2px solid transparent;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .topbar-nav a:hover { color: #fff; border-bottom-color: var(--accent); }
+
+    .topbar-right { display: flex; align-items: center; gap: 12px; }
+    .topbar-search-form { display: flex; align-items: center; gap: 0; }
+    .topbar-search-form input {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-right: none;
+      border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+      color: #fff; font-family: 'DM Sans', sans-serif; font-size: 13px;
+      padding: 7px 12px; outline: none; width: 180px;
+      transition: background 0.15s;
+    }
+    .topbar-search-form input::placeholder { color: rgba(255,255,255,0.35); }
+    .topbar-search-form input:focus { background: rgba(255,255,255,0.13); }
+    .topbar-search-form button {
+      background: var(--accent); border: none;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      color: var(--navy); font-size: 13px; font-weight: 500;
+      padding: 7px 14px; cursor: pointer; transition: background 0.15s;
+    }
+    .topbar-search-form button:hover { background: var(--accent-light); }
+
+    .menu-btn {
+      display: none; background: none; border: none; cursor: pointer;
+      flex-direction: column; gap: 5px; padding: 4px;
+    }
+    .menu-btn span {
+      display: block; width: 22px; height: 2px;
+      background: rgba(255,255,255,0.8); border-radius: 2px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--navy);
+      padding: 4rem 2rem 3.5rem;
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 50%, rgba(201,168,76,0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 60% at 80% 30%, rgba(42,92,168,0.25) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-inner { position: relative; z-index: 1; }
+    .hero-eyebrow {
+      font-family: 'Sora', sans-serif;
+      font-size: 11px; font-weight: 500; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 14px;
+    }
+    .hero h1 {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(26px, 4vw, 42px); font-weight: 300;
+      color: #fff; letter-spacing: -0.01em; line-height: 1.2;
+      margin-bottom: 10px;
+    }
+    .hero h1 strong { font-weight: 600; }
+    .hero-sub {
+      font-size: 15px; color: rgba(255,255,255,0.5); margin-bottom: 2rem;
+    }
+    .hero-logo {
+      width: 72px; height: 72px; object-fit: cover;
+      border-radius: 16px; margin-bottom: 1.5rem;
+      border: 2px solid rgba(201,168,76,0.35);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+
+    /* ── QUICK LINKS STRIP ── */
+    .quicklinks {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      display: flex; gap: 0; overflow-x: auto; align-items: center;
+      justify-content: center;
+      scrollbar-width: none;
+    }
+    .quicklinks::-webkit-scrollbar { display: none; }
+    .quicklinks a {
+      font-size: 13px; color: var(--text-secondary);
+      text-decoration: none; white-space: nowrap;
+      padding: 14px 16px; border-bottom: 2px solid transparent;
+      transition: color 0.15s, border-color 0.15s;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .quicklinks a:hover { color: var(--navy); border-bottom-color: var(--accent); }
+    .quicklinks-icon { font-size: 14px; }
+    .quicklinks-concern {
+      font-size: 13px; color: #c0392b !important;
+      text-decoration: none; white-space: nowrap;
+      padding: 10px 16px; margin: 4px 4px;
+      border-radius: 6px;
+      background: #fdf0ee;
+      border: 1px solid rgba(192,57,43,0.2);
+      font-weight: 500;
+      display: flex; align-items: center; gap: 6px;
+      transition: background 0.15s;
+    }
+    .quicklinks-concern:hover { background: #faddda; }
+
+    /* ── LAYOUT ── */
+    .page-content { max-width: 1200px; margin: 0 auto; padding: 2.5rem 1.5rem 3rem; }
+
+    .section-heading {
+      font-family: 'Sora', sans-serif;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--text-muted);
+      margin-bottom: 1.25rem; padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ── SUBJECTS GRID ── */
+    .subjects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 14px; margin-bottom: 3rem;
+    }
+    .subj-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      overflow: hidden; text-decoration: none;
+      transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s;
+      display: block;
+    }
+    .subj-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(15,37,71,0.12);
+      border-color: rgba(201,168,76,0.4);
+    }
+    .subj-card-img {
+      width: 100%; height: 110px; object-fit: cover; display: block;
+    }
+    .subj-card-body { padding: 12px 14px 14px; }
+    .subj-card-name {
+      font-family: 'Sora', sans-serif;
+      font-size: 14px; font-weight: 500; color: var(--text-primary);
+    }
+    .subj-card-tag {
+      font-size: 12px; color: var(--text-muted); margin-top: 3px;
+    }
+
+    /* ── INFO SECTION ── */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 14px;
+    }
+    .info-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .info-card-head {
+      padding: 14px 16px 12px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .info-card-head-icon {
+      width: 28px; height: 28px; border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; flex-shrink: 0;
+    }
+    .info-card-title {
+      font-family: 'Sora', sans-serif;
+      font-size: 13px; font-weight: 500; color: var(--text-primary);
+    }
+    .info-link {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 16px;
+      font-size: 13px; color: var(--text-secondary);
+      text-decoration: none; border-bottom: 1px solid var(--border);
+      transition: background 0.12s, color 0.12s;
+      gap: 8px;
+    }
+    .info-link:last-child { border-bottom: none; }
+    .info-link:hover { background: var(--cream); color: var(--navy); }
+    .info-link-arrow { color: var(--text-muted); font-size: 11px; flex-shrink: 0; }
+
+    /* ── NOTICE CARD ── */
+    .notice-card {
+      background: var(--navy);
+      border-radius: var(--radius);
+      border: 1px solid rgba(201,168,76,0.25);
+      padding: 1.25rem 1.25rem;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .notice-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(201,168,76,0.15);
+      border: 1px solid rgba(201,168,76,0.3);
+      color: var(--accent-light); font-size: 11px; font-weight: 500;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 3px 10px; border-radius: 20px; width: fit-content;
+    }
+    .notice-text { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.6; }
+    .notice-card-lost {
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      overflow: hidden; margin-top: 14px;
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      background: var(--navy);
+      padding: 1.5rem 2rem;
+      text-align: center;
+      font-size: 12px; color: rgba(255,255,255,0.3);
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      .topbar-nav, .topbar-search-form { display: none; }
+      .menu-btn { display: flex; }
+      .hero { padding: 2.5rem 1.25rem 2rem; }
+      .page-content { padding: 1.5rem 1rem 2rem; }
+      .quicklinks { padding: 0 1rem; }
+    }
+
+    /* ── MOBILE NAV ── */
+    .mobile-nav {
+      display: none; position: fixed; inset: 58px 0 0 0;
+      background: var(--navy); z-index: 99;
+      flex-direction: column; padding: 1rem;
+      overflow-y: auto;
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a {
+      font-size: 16px; color: rgba(255,255,255,0.8);
+      text-decoration: none; padding: 13px 1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .mobile-nav a:hover { color: #fff; }
+    .mobile-nav .mobile-search {
+      display: flex; gap: 0; margin-bottom: 1rem;
+    }
+    .mobile-nav .mobile-search input {
+      flex: 1; background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15); border-right: none;
+      border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+      color: #fff; font-size: 14px; padding: 10px 14px; outline: none;
+    }
+    .mobile-nav .mobile-search input::placeholder { color: rgba(255,255,255,0.35); }
+    .mobile-nav .mobile-search button {
+      background: var(--accent); border: none;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      color: var(--navy); font-size: 14px; font-weight: 500;
+      padding: 10px 16px; cursor: pointer;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero-inner { animation: fadeUp 0.7s ease both; }
+    .subj-card  { animation: fadeUp 0.5s ease both; }
+    .subj-card:nth-child(1) { animation-delay: 0.05s; }
+    .subj-card:nth-child(2) { animation-delay: 0.10s; }
+    .subj-card:nth-child(3) { animation-delay: 0.15s; }
+    .subj-card:nth-child(4) { animation-delay: 0.20s; }
+    .subj-card:nth-child(5) { animation-delay: 0.25s; }
+    .subj-card:nth-child(6) { animation-delay: 0.30s; }
+    .subj-card:nth-child(7) { animation-delay: 0.35s; }
+    .subj-card:nth-child(8) { animation-delay: 0.40s; }
+  </style>
+</head>
+<body>
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <a class="topbar-logo" href="#">
+      <img src="media/logo.png" alt="Wrekin College">
+      <span class="topbar-logo-name">Wrekin College</span>
+    </a>
+    <nav class="topbar-nav">
+      <a href="#home">Home</a>
+      <a href="#subjects">Subjects</a>
+      <a href="#information">Information</a>
+      <a href="#wellbeing">Wellbeing</a>
+    </nav>
+    <div class="topbar-right">
+      <form class="topbar-search-form" action="https://www.google.com/search" method="GET" target="_blank">
+        <input type="text" name="q" placeholder="Search Google…">
+        <button type="submit">Search</button>
+      </form>
+      <button class="menu-btn" onclick="toggleMobileNav()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MOBILE NAV -->
+  <div class="mobile-nav" id="mobileNav">
+    <form class="mobile-search" action="https://www.google.com/search" method="GET" target="_blank">
+      <input type="text" name="q" placeholder="Search Google…">
+      <button type="submit">Search</button>
+    </form>
+    <a href="#home" onclick="closeMobileNav()">Home</a>
+    <a href="#subjects" onclick="closeMobileNav()">Subjects</a>
+    <a href="#information" onclick="closeMobileNav()">Information</a>
+    <a href="#wellbeing" onclick="closeMobileNav()">Wellbeing</a>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdqkUoGpNdYnQ1_Nkbf4YvU_a8RPsLC14f1M9Bq7Q461qpJcA/viewform" style="color:#e8a09a; font-weight:500;">⚠ Report a Concern</a>
+    <a href="https://mail.google.com/mail/u/0/#inbox">Gmail</a>
+    <a href="https://classroom.google.com/u/0/h">Google Classroom</a>
+    <a href="https://drive.google.com/drive/u/0/my-drive">Google Drive</a>
+    <a href="https://calendar.wrekincollege.com/">SOCS</a>
+    <a href="https://wrekin.isamshosting.cloud/">iSAMS</a>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-inner">
+      <img src="media/logo.png" class="hero-logo" alt="Wrekin College">
+      <div class="hero-eyebrow">E-Learning Hub</div>
+      <h1><strong>Wrekin College</strong><br>Online Learning</h1>
+      <p class="hero-sub">Resources, subjects and school information — all in one place</p>
+    </div>
+  </section>
+
+  <!-- QUICK LINKS STRIP -->
+  <div class="quicklinks">
+    <a href="https://mail.google.com/mail/u/0/#inbox"><span class="quicklinks-icon">✉</span> Gmail</a>
+    <a href="https://classroom.google.com/u/0/h"><span class="quicklinks-icon">🎓</span> Classroom</a>
+    <a href="https://drive.google.com/drive/u/0/my-drive"><span class="quicklinks-icon">📁</span> Drive</a>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdqkUoGpNdYnQ1_Nkbf4YvU_a8RPsLC14f1M9Bq7Q461qpJcA/viewform" class="quicklinks-concern"><span class="quicklinks-icon">⚠</span> Report a Concern</a>
+    <a href="https://calendar.google.com/calendar/u/0/r?tab=rc"><span class="quicklinks-icon">📅</span> Calendar</a>
+    <a href="https://calendar.wrekincollege.com/"><span class="quicklinks-icon">⚽</span> SOCS</a>
+    <a href="https://wrekin.isamshosting.cloud/"><span class="quicklinks-icon">📋</span> iSAMS</a>
+    <a href="https://www.gcsepod.com"><span class="quicklinks-icon">🎧</span> GCSEPod</a>
+    <a href="https://sites.google.com/wrekincollege.com/mobilityprint/home"><span class="quicklinks-icon">🖨</span> Mobility Print</a>
+    <a href="https://sites.google.com/wrekincollege.com/libraryhome/study-resources?authuser=0"><span class="quicklinks-icon">📚</span> Study Resources</a>
+    <a href="https://sites.google.com/wrekincollege.com/exams/home"><span class="quicklinks-icon">📝</span> Exams</a>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="page-content">
+
+    <!-- SUBJECTS -->
+    <section id="subjects">
+      <div class="section-heading">Subjects</div>
+      <div class="subjects-grid">
+
+        <a class="subj-card" href="https://sites.google.com/wrekincollege.com/computing/home">
+          <img class="subj-card-img" src="media/Computing.jpg" alt="Computing">
+          <div class="subj-card-body">
+            <div class="subj-card-name">Computing</div>
+            <div class="subj-card-tag">Technology &amp; digital skills</div>
+          </div>
+        </a>
+
+        <a class="subj-card" href="https://sites.google.com/wrekincollege.com/ealdepartment/home">
+          <img class="subj-card-img" src="media/EAL.jpg" alt="EAL">
+          <div class="subj-card-body">
+            <div class="subj-card-name">EAL</div>
+            <div class="subj-card-tag">English as an additional language</div>
+          </div>
+        </a>
+
+        <a class="subj-card" href="https://sites.google.com/wrekincollege.com/epq/home">
+          <img class="subj-card-img" src="media/epq.jpg" alt="EPQ">
+          <div class="subj-card-body">
+            <div class="subj-card-name">EPQ</div>
+            <div class="subj-card-tag">Extended project qualification</div>
+          </div>
+        </a>
+
+        <a class="subj-card" href="https://sites.google.com/wrekincollege.com/geography/home">
+          <img class="subj-card-img" src="media/geography.png" alt="Geography">
+          <div class="subj-card-body">
+            <div class="subj-card-name">Geography</div>
+            <div class="subj-card-tag">People, places &amp; environment</div>
+          </div>
+        </a>
+
+        <a class="subj-card" href="https://sites.google.com/wrekincollege.com/libraryhome/home">
+          <img class="subj-card-img" src="media/Library.jpg" alt="Library">
+          <div class="subj-card-body">
+            <div class="subj-card-name">Library</div>
+            <div class="subj-card-tag">Resources &amp; reading</div>
+          </div>
+        </a>
+
+        <a class="subj-card" href="https://sites.google.com/wrekincollege.com/mathsv2/home">
+          <img class="subj-card-img" src="media/Mathematics.jpg" alt="Mathematics">
+          <div class="subj-card-body">
+            <div class="subj-card-name">Mathematics</div>
+            <div class="subj-card-tag">Numbers, logic &amp; problem solving</div>
+          </div>
+        </a>
+
+        <a class="subj-card" href="https://sites.google.com/Wrekincollege.com/musiccurriculum/">
+          <img class="subj-card-img" src="media/Music.jpg" alt="Music">
+          <div class="subj-card-body">
+            <div class="subj-card-name">Music</div>
+            <div class="subj-card-tag">Performance &amp; theory</div>
+          </div>
+        </a>
+
+        <a class="subj-card" href="https://sites.google.com/wrekincollege.com/wrekin-science/home">
+          <img class="subj-card-img" src="media/science.jpg" alt="Science">
+          <div class="subj-card-body">
+            <div class="subj-card-name">Science</div>
+            <div class="subj-card-tag">Biology, chemistry &amp; physics</div>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- INFORMATION -->
+    <section id="information">
+      <div class="section-heading">Information</div>
+      <div class="info-grid">
+
+        <!-- Useful Links -->
+        <div class="info-card">
+          <div class="info-card-head">
+            <div class="info-card-head-icon" style="background:#e8f0fb;">🔗</div>
+            <div class="info-card-title">Useful Links</div>
+          </div>
+          <a class="info-link" href="https://mail.google.com/mail/u/0/#inbox">Gmail <span class="info-link-arrow">↗</span></a>
+          <a class="info-link" href="https://classroom.google.com/u/0/h">Google Classroom <span class="info-link-arrow">↗</span></a>
+          <a class="info-link" href="https://calendar.wrekincollege.com/">SOCS <span class="info-link-arrow">↗</span></a>
+          <a class="info-link" href="https://calendar.google.com/calendar/u/0/r?tab=rc">Google Calendar <span class="info-link-arrow">↗</span></a>
+          <a class="info-link" href="https://drive.google.com/drive/u/0/my-drive">Google Drive <span class="info-link-arrow">↗</span></a>
+          <a class="info-link" href="https://wrekin.isamshosting.cloud/">iSAMS <span class="info-link-arrow">↗</span></a>
+          <a class="info-link" href="https://sites.google.com/wrekincollege.com/mobilityprint/home">Mobility Print <span class="info-link-arrow">↗</span></a>
+          <a class="info-link" href="https://www.gcsepod.com">GCSEPod <span class="info-link-arrow">↗</span></a>
+          <a class="info-link" href="https://sites.google.com/wrekincollege.com/libraryhome/study-resources?authuser=0">Study Resources <span class="info-link-arrow">↗</span></a>
+          <a class="info-link" href="https://docs.google.com/spreadsheets/d/1sScIdimCssAmP61LPIubmYfPrWFOwOv0rQHVabEYRsw/edit#gid=0">KS3 Prep Timetable <span class="info-link-arrow">↗</span></a>
+          <a class="info-link" href="https://sites.google.com/wrekincollege.com/exams/home">Exams Information <span class="info-link-arrow">↗</span></a>
+          <a class="info-link" href="https://portal.focusonsound.com/expired/">Focus on Sound <span class="info-link-arrow">↗</span></a>
+          <a class="info-link" href="https://sites.google.com/wrekincollege.com/wrekinwellbeing/home">Wellbeing at Home <span class="info-link-arrow">↗</span></a>
+        </div>
+
+        <!-- Exam Information -->
+        <div class="info-card">
+          <div class="info-card-head">
+            <div class="info-card-head-icon" style="background:#faeeda;">📝</div>
+            <div class="info-card-title">Exam Information</div>
+          </div>
+          <a class="info-link" href="https://docs.google.com/document/d/1LDXrSQR9m1seOH28EZEQrxwBma_cHvg7eBxqmpKVA2Y/edit?tab=t.0#heading=h.gjdgxs">4th Form Revision List <span class="info-link-arrow">↗</span></a>
+          <a class="info-link" href="https://docs.google.com/document/d/1mz1QmVOTwExrPMO3Fja1h4Zk6LEwxS5jO__SbKN3wbA/edit?tab=t.0#heading=h.gjdgxs">3rd Form Revision List <span class="info-link-arrow">↗</span></a>
+          <a class="info-link" href="https://docs.google.com/document/d/1ppByyRFOeuUU86xh2NqAfJaYWbRz2AiD8uDsFsn5fss/edit?tab=t.0#heading=h.4np8x3ryxm31">3rd Form Exam Timetable <span class="info-link-arrow">↗</span></a>
+        </div>
+
+        <!-- For Pupils -->
+        <div class="info-card">
+          <div class="info-card-head">
+            <div class="info-card-head-icon" style="background:#eaf3de;">🎒</div>
+            <div class="info-card-title">For Pupils</div>
+          </div>
+          <a class="info-link" href="https://drive.google.com/file/d/1oVulqiXYXij9p0bqXongnJ_fIn8dms9V/view">Pupils Handbook <span class="info-link-arrow">↗</span></a>
+          <a class="info-link" href="https://docs.google.com/spreadsheets/d/1WMJwJL7VJLDCbUzqfUJAPl84MgLZgYMKmS93-EO3peM/edit#gid=0">Prep Timetable <span class="info-link-arrow">↗</span></a>
+          <a class="info-link" href="https://docs.google.com/document/d/1WxSnOOhp8aGmIjfIb1bjVFoq1B6tw4_Q/edit?rtpof=true&sd=true&tab=t.0">Dining Hall Rota — Summer 2026 <span class="info-link-arrow">↗</span></a>
+          <a class="info-link" href="https://docs.google.com/spreadsheets/d/1sScIdimCssAmP61LPIubmYfPrWFOwOv0rQHVabEYRsw/edit#gid=0">KS3 Prep Timetable <span class="info-link-arrow">↗</span></a>
+        </div>
+
+        <!-- Wellbeing -->
+        <div id="wellbeing" class="info-card">
+          <div class="info-card-head">
+            <div class="info-card-head-icon" style="background:#fbeaf0;">💚</div>
+            <div class="info-card-title">Wellbeing</div>
+          </div>
+          <a class="info-link" href="https://drive.google.com/file/d/18XmeFVMeMjAQhUbC1qB-ycA_MVTIZvTg/view">Junior Wellbeing App <span class="info-link-arrow">↗</span></a>
+          <a class="info-link" href="https://drive.google.com/file/d/18YdTwXTU52Vjo-8ydUS25VptHHpdRGTs/view">Senior Wellbeing <span class="info-link-arrow">↗</span></a>
+          <a class="info-link" href="https://docs.google.com/forms/d/e/1FAIpQLSdqkUoGpNdYnQ1_Nkbf4YvU_a8RPsLC14f1M9Bq7Q461qpJcA/viewform">Report a Concern <span class="info-link-arrow">↗</span></a>
+          <a class="info-link" href="https://drive.google.com/drive/folders/1EcdE0m5oLcueN5OMvP-9_GXxzVewHGGt">Effective Revision Strategies <span class="info-link-arrow">↗</span></a>
+          <a class="info-link" href="https://sites.google.com/wrekincollege.com/wrekinwellbeing/home">Wellbeing at Home <span class="info-link-arrow">↗</span></a>
+        </div>
+
+        <!-- Announcements -->
+        <div style="display:flex; flex-direction:column; gap:14px;">
+          <div class="notice-card">
+            <div class="notice-badge">&#x2605; New</div>
+            <div class="notice-text">Newly announced items are displayed here. Add your latest news, links or reminders in this space.</div>
+          </div>
+          <div class="notice-card-lost">
+            <div class="info-card-head">
+              <div class="info-card-head-icon" style="background:#f1efe8;">🔍</div>
+              <div class="info-card-title">Lost &amp; Found</div>
+            </div>
+            <a class="info-link" href="#">Lost items information goes here <span class="info-link-arrow">↗</span></a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    Wrekin College E-Learning Hub &mdash; by Mr T.W. Lintern
+  </footer>
+
+  <script>
+    function toggleMobileNav() {
+      document.getElementById('mobileNav').classList.toggle('open');
+    }
+    function closeMobileNav() {
+      document.getElementById('mobileNav').classList.remove('open');
+    }
+    window.addEventListener('scroll', function() {
+      if (window.scrollY > 10) {
+        document.querySelector('.topbar').style.boxShadow = '0 2px 16px rgba(15,37,71,0.18)';
+      } else {
+        document.querySelector('.topbar').style.boxShadow = 'none';
+      }
+    });
+  </script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("sw.js")
+          .then(reg => console.log("SW registered:", reg.scope))
+          .catch(err => console.warn("SW failed:", err));
+      });
+    }
+  </script>
+</body>
+</html>
