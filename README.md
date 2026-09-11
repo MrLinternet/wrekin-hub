@@ -1,1 +1,1 @@
-Wrekin eLearning Hub web page with added Javascript to download the page as an application to any device.
+Wrekin College Online Learning Resources, subjects and school information — all in one place
